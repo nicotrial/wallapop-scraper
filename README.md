@@ -14,13 +14,57 @@ python3 -m venv venv
 
 ## Usage
 
+Basic search:
+
 ```bash
 ./venv/bin/python wallapop_scraper.py --query "bmw e36" --max-results 20
-./venv/bin/python wallapop_scraper.py --query "golf gti" --min-price 1000 --max-price 8000 --json
+```
+
+Price filters:
+
+```bash
+./venv/bin/python wallapop_scraper.py --query "golf gti" --min-price 1000 --max-price 8000 --max-results 30
+```
+
+JSON output:
+
+```bash
+./venv/bin/python wallapop_scraper.py --query "golf gti" --max-results 10 --json
+```
+
+Visible browser window:
+
+```bash
 ./venv/bin/python wallapop_scraper.py --query "bmw e36" --headed
 ```
 
-## Options
+Location filters:
+
+```bash
+./venv/bin/python wallapop_scraper.py --query "bmw e36" --latitude 40.4168 --longitude -3.7038 --distance-km 50
+```
+
+Custom category and sorting:
+
+```bash
+./venv/bin/python wallapop_scraper.py --query "mountain bike" --category-id 12465 --order-by newest --max-results 25
+```
+
+## CLI Options
+
+- `--query`: Search keywords.
+- `--category-id`: Wallapop category ID.
+- `--min-price`: Minimum price in EUR.
+- `--max-price`: Maximum price in EUR.
+- `--latitude`: Latitude filter.
+- `--longitude`: Longitude filter.
+- `--distance-km`: Radius filter in kilometers.
+- `--order-by`: Sort order.
+- `--max-results`: Maximum number of results to return.
+- `--headed`: Open a visible browser instead of headless mode.
+- `--json`: Print results as JSON.
+
+## Help
 
 ```bash
 ./venv/bin/python wallapop_scraper.py --help
