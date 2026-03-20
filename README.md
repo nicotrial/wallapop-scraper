@@ -2,6 +2,8 @@
 
 Playwright-based Wallapop scraper with a CLI for live marketplace searches.
 
+No environment variables are required.
+
 ## Setup
 
 ```bash
