@@ -12,6 +12,17 @@ import time
 from typing import Optional, List, Dict, Any
 from dataclasses import dataclass, asdict
 
+SCRAPER_BANNER = r"""
+__        __    _ _                         _
+\ \      / /_ _| | | __ _ _ __   ___  _ __| |
+ \ \ /\ / / _` | | |/ _` | '_ \ / _ \| '__| |
+  \ V  V / (_| | | | (_| | |_) | (_) | |  | |
+   \_/\_/ \__,_|_|_|\__,_| .__/ \___/|_|  |_|
+                         |_|
+
+        Search Scraper CLI
+"""
+
 
 @dataclass
 class SearchResult:
@@ -55,6 +66,7 @@ class WallapopScraper:
         self,
         keywords: str,
         category_id: Optional[int] = None,
+        subcategory_ids: Optional[List[int]] = None,
         min_price: Optional[int] = None,
         max_price: Optional[int] = None,
         latitude: Optional[float] = None,
@@ -71,6 +83,8 @@ class WallapopScraper:
 
         if category_id:
             params.append(f"category_id={category_id}")
+        if subcategory_ids:
+            params.append(f"subcategory_ids={','.join(str(subcategory_id) for subcategory_id in subcategory_ids)}")
         if min_price:
             params.append(f"min_sale_price={min_price}")
         if max_price:
@@ -337,6 +351,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Scrape Wallapop search results with Playwright.")
     parser.add_argument("--query", default="bmw e36", help="Search query keywords.")
     parser.add_argument("--category-id", type=int, default=100, help="Wallapop category ID.")
+    parser.add_argument("--subcategory-id", dest="subcategory_ids", type=int, action="append", help="Wallapop subcategory ID. Repeat to pass multiple values.")
     parser.add_argument("--min-price", type=int, help="Minimum price in EUR.")
     parser.add_argument("--max-price", type=int, default=5000, help="Maximum price in EUR.")
     parser.add_argument("--latitude", type=float, help="Latitude filter.")
@@ -354,10 +369,13 @@ if __name__ == "__main__":
     args = parse_args()
 
     try:
+        if not args.json:
+            print(SCRAPER_BANNER)
         with WallapopScraper(headless=not args.headed, verbose=not args.quiet) as scraper:
             results = scraper.search(
                 keywords=args.query,
                 category_id=args.category_id,
+                subcategory_ids=args.subcategory_ids,
                 min_price=args.min_price,
                 max_price=args.max_price,
                 latitude=args.latitude,

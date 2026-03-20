@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .DS_Store
 .claude/
+.wallapop_categories_cache.json
 
 debug_search_data.json
 search_page.html
