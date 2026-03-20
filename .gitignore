@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+.claude/
+
+debug_search_data.json
+search_page.html
+
+.env
