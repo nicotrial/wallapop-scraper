@@ -70,6 +70,53 @@ Skill files:
 - `agents/openai.yaml`: UI metadata
 - `scripts/search_wallapop.py`: deterministic wrapper that prefers the repo venv
 
+## AI Agent Console
+
+The repo also includes `agent_console.py`, which connects a chat model to the Wallapop search tool.
+
+It is designed for requests like:
+
+```text
+Don't show me parts. I'm looking for a nice project, maybe a Corvette or a Mazda RX-7, under 8000 euros, and it should be drivable.
+```
+
+The model can decide when to call the local Wallapop CLI, run one or more searches, and then tailor the answer to the user's intent.
+
+### Configure the model API
+
+Set one of these API keys before running:
+
+```bash
+export AI_API_KEY=your_key_here
+```
+
+Or use the compatible existing names:
+
+```bash
+export NVIDIA_API_KEY=your_key_here
+export NVIDIA_BASE_URL=https://integrate.api.nvidia.com/v1
+export NVIDIA_MODEL=nvidia/nemotron-3-super-120b-a12b
+```
+
+Optional generic overrides:
+
+```bash
+export AI_BASE_URL=your_model_base_url
+export AI_MODEL=your_model_name
+```
+
+### Run the console
+
+```bash
+./venv/bin/python agent_console.py
+```
+
+Example prompt:
+
+```text
+Don't show me parts. I'm looking for a nice project, maybe a Corvette or a Mazda RX-7, under 8000 euros, and it should be drivable.
+```
+
 ## Use With AI Agents
 
 This repo can be used directly by terminal-based AI coding agents such as Codex, Claude Code, OpenCode/OpenHands-style agents, or similar tools that can read files and run shell commands.
