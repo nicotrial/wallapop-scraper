@@ -33,10 +33,16 @@ class SearchResult:
 class WallapopScraper:
     """Scraper for Wallapop search results using Playwright."""
 
-    def __init__(self, headless: bool = True):
+    def __init__(self, headless: bool = True, verbose: bool = True):
         self.headless = headless
+        self.verbose = verbose
         self._playwright = None
         self._browser = None
+
+    def _log(self, message: str):
+        """Print a message when verbose mode is enabled."""
+        if self.verbose:
+            print(message)
 
     def _init_browser(self):
         """Initialize the browser if not already done."""
@@ -80,7 +86,7 @@ class WallapopScraper:
 
         url = f"https://es.wallapop.com/app/search?{'&'.join(params)}"
 
-        print(f"Navigating to: {url}")
+        self._log(f"Navigating to: {url}")
 
         page = self._browser.new_page()
         page.set_viewport_size({"width": 1280, "height": 800})
@@ -97,7 +103,7 @@ class WallapopScraper:
                         if 'json' in content_type:
                             data = response.json()
                             captured_data.append((response.url, data))
-                            print(f"  Captured: {response.url.split('/')[-1][:50]}...")
+                            self._log(f"  Captured: {response.url.split('/')[-1][:50]}...")
             except Exception:
                 pass
 
@@ -227,7 +233,7 @@ class WallapopScraper:
 
     def _extract_from_dom(self, page, max_results: int) -> List[SearchResult]:
         """Extract results from the DOM as fallback."""
-        print("Extracting from DOM...")
+        self._log("Extracting from DOM...")
 
         selectors = [
             '[data-testid="item-card"]',
@@ -238,7 +244,7 @@ class WallapopScraper:
         for selector in selectors:
             elements = page.query_selector_all(selector)
             if elements:
-                print(f"  Found {len(elements)} elements")
+                self._log(f"  Found {len(elements)} elements")
                 for el in elements[:max_results]:
                     try:
                         title = el.inner_text().split('\n')[0] if el.inner_text() else 'Unknown'
@@ -340,6 +346,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-results", type=int, default=20, help="Maximum number of results to return.")
     parser.add_argument("--headed", action="store_true", help="Run browser with a visible window.")
     parser.add_argument("--json", action="store_true", help="Print results as JSON.")
+    parser.add_argument("--quiet", action="store_true", help="Suppress scraper progress logs.")
     return parser.parse_args()
 
 
@@ -347,7 +354,7 @@ if __name__ == "__main__":
     args = parse_args()
 
     try:
-        with WallapopScraper(headless=not args.headed) as scraper:
+        with WallapopScraper(headless=not args.headed, verbose=not args.quiet) as scraper:
             results = scraper.search(
                 keywords=args.query,
                 category_id=args.category_id,

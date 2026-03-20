@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wallapop Scraper"
+  short_description: "Run live Wallapop marketplace searches"
+  default_prompt: "Use $wallapop-scraper to run a Wallapop search and return structured results."

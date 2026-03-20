@@ -2,6 +2,8 @@
 
 Playwright-based Wallapop scraper with a CLI for live marketplace searches.
 
+This repo can also be used as a Codex-style skill for an AI agent through `SKILL.md` and `scripts/search_wallapop.py`.
+
 No environment variables are required.
 
 ## Setup
@@ -49,6 +51,20 @@ Custom category and sorting:
 ```bash
 ./venv/bin/python wallapop_scraper.py --query "mountain bike" --category-id 12465 --order-by newest --max-results 25
 ```
+
+## Skill Usage
+
+Agent-friendly wrapper:
+
+```bash
+python3 scripts/search_wallapop.py --query "bmw e36" --max-results 10 --json
+```
+
+Skill files:
+
+- `SKILL.md`: agent instructions and workflow
+- `agents/openai.yaml`: UI metadata
+- `scripts/search_wallapop.py`: deterministic wrapper that prefers the repo venv
 
 ## CLI Options
 
